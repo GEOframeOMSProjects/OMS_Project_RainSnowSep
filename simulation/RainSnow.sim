@@ -1,0 +1,74 @@
+import static oms3.SimBuilder.instance as OMS3
+def home = oms_prj
+
+// start and end date of the simulation
+def startDate= "1994-01-01 00:00"
+def endDate="1996-01-01 00:00"
+OMS3.sim {
+
+resource "$oms_prj/lib"
+
+ model(while: "reader_data_precip.doProcess" ) {
+   components {
+    
+        // components to be called: reader input data, lwrb and writer output data
+        "reader_data_precip"                   "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+        "reader_data_temp"                     "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+        "rainSnowSep"                          "rainSnowSperataion.RainSnowSeparationPointCase"
+        "vreader_station"                      "org.jgrasstools.gears.io.shapefile.OmsShapefileFeatureReader"
+        "writer_snow"                            "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter" 
+        "writer_rain"                            "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter" 
+         
+   }
+
+  
+   parameter{
+   
+        // parameter of the reader components 
+        "reader_data_precip.file"             "${home}/data/interpolated_rainfall.csv"
+        "reader_data_precip.idfield"          "ID"  
+        "reader_data_precip.tStart"           "${startDate}"
+        "reader_data_precip.tEnd"             "${endDate}"
+        "reader_data_precip.tTimestep"          60
+        "reader_data_precip.fileNovalue"      "-9999"
+        
+        "reader_data_temp.file"             "${home}/data/Temperature.csv"
+        "reader_data_temp.idfield"          "ID"  
+        "reader_data_temp.tStart"           "${startDate}"
+        "reader_data_temp.tEnd"             "${endDate}"
+        "reader_data_temp.tTimestep"         60
+        "reader_data_temp.fileNovalue"      "-9999"
+
+         "vreader_station.file"                 "${home}/data/stations.shp"
+       
+        "rainSnowSep.fStationsid"                        "netnum"
+        "rainSnowSep.alfa_r"                 1.08
+        "rainSnowSep.alfa_s"                  1.05
+        "rainSnowSep.meltingTemperature"     1.94
+
+            
+        // parameter of the writing component    
+        "writer_snow.file"                   "${home}/output/snow.csv" 
+        "writer_snow.tStart"                 "${startDate}"
+        "writer_snow.tTimestep"              60
+        
+        "writer_rain.file"                   "${home}/output/rain.csv" 
+        "writer_rain.tStart"                 "${startDate}"
+        "writer_rain.tTimestep"              60
+        
+
+   }
+    connect {
+        
+        "reader_data_precip.outData"               "rainSnowSep.inPrecipitationValues"
+        "reader_data_temp.outData"                  "rainSnowSep.inTemperatureValues"
+        "vreader_station.geodata"                   "rainSnowSep.inStations"
+        "rainSnowSep.outRainfallHM"                 "writer_rain.inData"
+        "rainSnowSep.outSnowfallHM"                 "writer_snow.inData"
+
+   }
+
+ }
+}
+
+
