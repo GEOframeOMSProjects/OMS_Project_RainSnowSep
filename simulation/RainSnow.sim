@@ -15,7 +15,6 @@ resource "$oms_prj/lib"
         "reader_data_precip"                   "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
         "reader_data_temp"                     "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
         "rainSnowSep"                          "rainSnowSperataion.RainSnowSeparationPointCase"
-        "vreader_station"                      "org.jgrasstools.gears.io.shapefile.OmsShapefileFeatureReader"
         "writer_snow"                            "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter" 
         "writer_rain"                            "org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter" 
          
@@ -39,9 +38,6 @@ resource "$oms_prj/lib"
         "reader_data_temp.tTimestep"         60
         "reader_data_temp.fileNovalue"      "-9999"
 
-         "vreader_station.file"                 "${home}/data/stations.shp"
-       
-        "rainSnowSep.fStationsid"                        "netnum"
         "rainSnowSep.alfa_r"                 1.08
         "rainSnowSep.alfa_s"                  1.05
         "rainSnowSep.meltingTemperature"     1.94
@@ -62,7 +58,6 @@ resource "$oms_prj/lib"
         
         "reader_data_precip.outData"               "rainSnowSep.inPrecipitationValues"
         "reader_data_temp.outData"                  "rainSnowSep.inTemperatureValues"
-        "vreader_station.geodata"                   "rainSnowSep.inStations"
         "rainSnowSep.outRainfallHM"                 "writer_rain.inData"
         "rainSnowSep.outSnowfallHM"                 "writer_snow.inData"
 
