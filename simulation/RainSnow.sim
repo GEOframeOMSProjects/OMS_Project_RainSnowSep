@@ -3,7 +3,7 @@ def home = oms_prj
 
 // start and end date of the simulation
 def startDate= "1994-01-01 00:00"
-def endDate="1996-01-01 00:00"
+def endDate="1994-02-01 00:00"
 OMS3.sim {
 
 resource "$oms_prj/lib"
